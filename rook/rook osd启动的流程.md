@@ -53,9 +53,9 @@ rook-discover-slncz                                       1/1     Running       
 
 Rook 代码结构是比较清晰的，关于 osd 的代码可以从 `pkg/operator/ceph/cluster/osd` 找到。
 
-![](.rook osd启动的流程_images/def15469.png)
+![1](.rook osd启动的流程_images/def15469.png)
 
-![](.rook osd启动的流程_images/386f7c25.png)
+![2](.rook osd启动的流程_images/386f7c25.png)
 
 ![](.rook osd启动的流程_images/4b67dfbc.png)
 
