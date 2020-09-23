@@ -53,49 +53,49 @@ rook-discover-slncz                                       1/1     Running       
 
 Rook 代码结构是比较清晰的，关于 osd 的代码可以从 `pkg/operator/ceph/cluster/osd` 找到。
 
-![1](.rook osd启动的流程_images/def15469.png)
+![](rook osd启动的流程_images/def15469.png)
 
-![2](.rook osd启动的流程_images/386f7c25.png)
+![](rook osd启动的流程_images/386f7c25.png)
 
-![](.rook osd启动的流程_images/4b67dfbc.png)
+![](rook osd启动的流程_images/4b67dfbc.png)
 
-![](.rook osd启动的流程_images/bf1598d7.png)
+![](rook osd启动的流程_images/bf1598d7.png)
 
 现在都用ceph-volume来安装ceph集群了，ceph-deploy已经不维护了。不用ceph-volume就用ceph本来的命令。
 
-![](.rook osd启动的流程_images/f30c1a2a.png)
+![](rook osd启动的流程_images/f30c1a2a.png)
 
 由于有一个 osd prepare 的过程，在 Rook 里是通过 init-container 来运行一个脚本来实现的。
 
-![](.rook osd启动的流程_images/40b15be8.png)
+![](rook osd启动的流程_images/40b15be8.png)
 
-![](.rook osd启动的流程_images/365fc9d3.png)
+![](rook osd启动的流程_images/365fc9d3.png)
 
-![](.rook osd启动的流程_images/47627e69.png)
+![](rook osd启动的流程_images/47627e69.png)
 
-![](.rook osd启动的流程_images/4308866c.png)
+![](rook osd启动的流程_images/4308866c.png)
 
 关于手动部署，一定要看看 ceph 的[官方文档](https://docs.ceph.com/en/latest/install/manual-deployment/) 。
 
-![](.rook osd启动的流程_images/79497a3d.png)
+![](rook osd启动的流程_images/79497a3d.png)
 
-![](.rook osd启动的流程_images/ec565aa1.png)
+![](rook osd启动的流程_images/ec565aa1.png)
 
 只有当状态为 completed 的时候才会真正的去启动 osd。
 
-![](.rook osd启动的流程_images/769c1a29.png)
+![](rook osd启动的流程_images/769c1a29.png)
 
-![](.rook osd启动的流程_images/51c97148.png)
+![](rook osd启动的流程_images/51c97148.png)
 
-![](.rook osd启动的流程_images/8a08faf3.png)
+![](rook osd启动的流程_images/8a08faf3.png)
 
-![](.rook osd启动的流程_images/981ccd28.png)
+![](rook osd启动的流程_images/981ccd28.png)
 
-![](.rook osd启动的流程_images/2e56a3d1.png)
+![](rook osd启动的流程_images/2e56a3d1.png)
 
-![](.rook osd启动的流程_images/7893a997.png)
+![](rook osd启动的流程_images/7893a997.png)
 
-![](.rook osd启动的流程_images/deddd3d7.png)
+![](rook osd启动的流程_images/deddd3d7.png)
 
 osd 的部署就是通过 `lsblk`、`udevadm` 这些命令来做检查的，下面的命令即使 Rook 里用到的命令，在节点上执行一次看看结果，Rook 会根据一些条件来筛选合适的设备来启动 osd。
 
@@ -103,25 +103,25 @@ osd 的部署就是通过 `lsblk`、`udevadm` 这些命令来做检查的，下�
 lsblk --all --noheadings --list --output KNAME
 ```
 
-![](.rook osd启动的流程_images/ae6eab6a.png)
+![](rook osd启动的流程_images/ae6eab6a.png)
 
 ```bash
 lsblk /dev/sdc --bytes --nodeps --pairs --paths --output SIZE,ROTA,TYPE,PKNAME,NAME,KNAME
 ```
 
-![](.rook osd启动的流程_images/d5cb6577.png)
+![](rook osd启动的流程_images/d5cb6577.png)
 
-![](.rook osd启动的流程_images/46f44406.png)
+![](rook osd启动的流程_images/46f44406.png)
 
-![](.rook osd启动的流程_images/9d8c5ea9.png)
+![](rook osd启动的流程_images/9d8c5ea9.png)
 
 ```bash
 udevadm info --query=property /dev/sdc
 ```
 
-![](.rook osd启动的流程_images/11bf44b5.png)
+![](rook osd启动的流程_images/11bf44b5.png)
 
-![](.rook osd启动的流程_images/e4612555.png)
+![](rook osd启动的流程_images/e4612555.png)
 
 通过下面的命令，我们在 osd 的节点上运行一下，`ceph-volume` 是用 python 写的，基本上就是通过一些磁盘、设备等命令来检查节点上的设备。如果 osd prepare 之后没有启动真正的 osd pod 的话，就需要查一下 osd prepare pod 的日志了，或者看一下 local-device 开头的 ConfigMap，里面会有执行 `ceph-volume` 的结果，下图的结果明显就是设备因为某些原因被拒绝了，具体尅看 `rejected_resons` 的结果。
 
@@ -129,7 +129,7 @@ udevadm info --query=property /dev/sdc
 ceph-volume inventory --format json
 ```
 
-![](.rook osd启动的流程_images/666a7c6c.png)
+![](rook osd启动的流程_images/666a7c6c.png)
 
 上面的代码走读比较麻烦，跳转来跳转去，下面是我画的一个图，可以参考这个图来理解 Rook 是如何启动 osd 的。
 
